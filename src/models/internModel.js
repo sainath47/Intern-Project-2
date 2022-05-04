@@ -1,35 +1,37 @@
 const { default: mongoose } = require("mongoose")
 const ObjectId = mongoose.Schema.Types.ObjectId
+//{ name: {mandatory}, email: {mandatory, valid email, unique}, mobile: {mandatory, valid mobile number, unique}, collegeId: {ObjectId, ref to college model, isDeleted: {boolean, default: false}}
 
-
-//*--------AUTHOR MODEL----------------
-const authorSchema = new mongoose.Schema(
+//*--------Intern MODEL----------------
+const internSchema = new mongoose.Schema(
     {
-        fname: {
+        name: {
             type: String,
             required: true,
         },
-        lname: {
+        mobile: {
             type: String,
             required: true,
         },
-        title: {
-            type: String,
-            enum: ["Mr", "Mrs", "Miss"]
+        collegeId: {
+            type: ObjectId,
+            ref: "college",
         },
         email: {
             type: String,
             required: true,
             unique: true
         },
+        isDeleted:{ 
+            type:boolean,
+             default: false
+            }
     
-    password: {
-        type: String,
-    required: true
-} 
+    
+
  }, { timestamps: true });
 
-module.exports = mongoose.model('author', authorSchema)
+module.exports = mongoose.model('intern', internSchema)
 
 
 

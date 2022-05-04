@@ -1,7 +1,7 @@
 const { default: mongoose } = require("mongoose")
 
 
-//*----------BLOG MODEL--------------
+//*----------College MODEL--------------
 
 
 
