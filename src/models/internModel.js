@@ -1,4 +1,6 @@
 const { default: mongoose } = require("mongoose")
+const ObjectId = mongoose.Schema.Types.ObjectId
+
 
 //*--------AUTHOR MODEL----------------
 const authorSchema = new mongoose.Schema(

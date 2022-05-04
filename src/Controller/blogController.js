@@ -95,7 +95,7 @@ const GetFilteredBlog = async function (req, res) {
     //*Validation
 
     if (allData.length == 0)
-      return res.status(404).send({ msg: "Enter valid Details" });
+      return res.status(404).send({ msg: "Enter valid Details in query" });
     res.status(200).send({ status: true, msg: allData });
   } catch (err) {
     res
@@ -114,7 +114,7 @@ const updateBlog = async function (req, res) {
     if (!isValid(blogId))
       return res.status(404).send({ status: false, msg: "BlogID invalid" });
 
-    const blogFound = await blogModel.findOne(blogId);
+    const blogFound = await blogModel.findOne({blogId});
     if (blogFound.isDeleted === true) {
       return res.status(404).send({ Status: "false", msg: "blog is deleted " });
     }
