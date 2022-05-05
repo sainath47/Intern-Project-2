@@ -87,6 +87,7 @@ if(college.isDeleted== true){
     //  console.log(res)
     //  (doubt 1)
     //method 2 (but why iam not able to create a new key in object , it worked only when schmea had that key)
+    
     collegeCopy["interests"]= allData
 
     // const {name,fullName,logoLink,isDeleted} = college

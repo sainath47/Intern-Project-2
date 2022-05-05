@@ -25,24 +25,20 @@ const createInten = async function (req, res) {
     const email = req.body.email;
     const mobile = req.body.mobile;
 
-    const validateMobile = 
-    function (inputtxt)
-    {
-      var phoneno = /^\d{10}$/;
-      if(inputtxt.value.match(phoneno))
-            {
-          return true;
-            }
-          else
-            {
-            alert("message");
-            return false;
-            }
-    }
+    const validateMobile = function(v){ return /^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/.test(v)}
     if(!validateMobile(mobile)) return res.status(400).send({ status: false, msg: "mobile no. is not valid" })
 
     const validateEmail = function(v){ return /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(v)}
     if(!validateEmail(email)) return res.status(400).send({ status: false, msg: "email is not valid" })
+
+   
+let alreadyAccount = await internModel.findOne({email:email})
+
+if (alreadyAccount) return res.status(400).send({msg:"account with this emailId already exist"})
+
+
+let alreadyAccountMobile = await internModel.findOne({mobile:mobile})
+if (alreadyAccountMobile) return res.status(400).send({msg:"account with this mobile no. already exist"})
 
     let collegeId = req.body.collegeId;
     if (!collegeId)
