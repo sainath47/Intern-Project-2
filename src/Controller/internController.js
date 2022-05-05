@@ -20,6 +20,30 @@ const createInten = async function (req, res) {
         });
     }
 
+    //*Extracts body
+    
+    const email = req.body.email;
+    const mobile = req.body.mobile;
+
+    const validateMobile = 
+    function (inputtxt)
+    {
+      var phoneno = /^\d{10}$/;
+      if(inputtxt.value.match(phoneno))
+            {
+          return true;
+            }
+          else
+            {
+            alert("message");
+            return false;
+            }
+    }
+    if(!validateMobile(mobile)) return res.status(400).send({ status: false, msg: "mobile no. is not valid" })
+
+    const validateEmail = function(v){ return /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(v)}
+    if(!validateEmail(email)) return res.status(400).send({ status: false, msg: "email is not valid" })
+
     let collegeId = req.body.collegeId;
     if (!collegeId)
       return res
@@ -31,10 +55,10 @@ const createInten = async function (req, res) {
         .status(400)
         .send({ status: false, msg: "Enter Valid College ID" });
 
-    //*Extracts Param
-    // const name = req.body.name;
-    const email = req.body.email;
-    const mobile = req.body.mobile;
+        if (!isValid(collegeId))
+        return res.status(404).send({ status: false, msg: "BlogID invalid" });
+
+
    
 
     //*Params Validation

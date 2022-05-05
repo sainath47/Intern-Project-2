@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
-// const authorModel = require("../models/authorModel");
-// const AuthorModel= require("../models/authorModel");
+const mongoose = require("mongoose")
+
 const collegeModel = require("../models/collegeModel");
 const internModel = require("../models/internModel");
+const isValid = mongoose.Types.ObjectId.isValid;
 
 
 
@@ -56,31 +57,40 @@ const GetCollegeDetails = async function (req, res) {
     let collegeName = req.query.collegeName;
 
     const college = await collegeModel.findOne({name:collegeName })
+    const collegeCopy = await collegeModel.findOne({name:collegeName }).select({name:1,fullName:1,logoLink:1,interests:1,_id:0})
+
 // console.log(college)
-    // "name": "xyz",
-    // "fullName": "Some Institute of Engineering and Technology",
-    // "logoLink": "some public s3 link for a college logo",
-    // "interests"
+
+const {name,fullName,logoLink,isDeleted} = college
+
+
+
+// {
+//   "name" : "iith",
+//   "fullName" : "Indian Institute of Technology, Hyderabad",
+//   "logoLink" : "https://functionup.s3.ap-south-1.amazonaws.com/colleges/iith.png",
+//   "isDeleted" : false
+// }
 
     let allData = await internModel
       .find({
         isDeleted: false,collegeId: college._id
-      }).select({_id:1,name:1,email:1,mobile:1})
-
-
+      }).select({name:1,email:1,mobile:1})
       
-      // "_id": "123a47301a53ecaeea02be59",
-      // "name": "Jane Doe",
-      // "email": "jane.doe@miet.ac.in",
-      // "mobile": "8888888888"
+      // console.log(collegeCopy)
+     
+    //  res.body.msg.interests= allData
+    //  console.log(res)
+    //  (doubt 1)
+    //method 2 (but why iam not able to create a new key in object , it worked only when schmea had that key)
+    // collegeCopy.interests= allData
 
-      // console.log(allData)
-    //  res.body.msg.interests= allData(doubt 1)
-    // college.interests= allData(doubt 2)
+
+    const result= {name,fullName,logoLink,isDeleted,interests:allData} 
     
-    for (let i=0 ; i<allData.length;i++) {
-      college.interests.push(allData[i])
-    }
+    // for (let i=0 ; i<allData.length;i++) {
+    //   collegeCopy.interests.push(allData[i])
+    // }
    
 
     // const newCollegeData = await collegeModel.findOne({name:collegeName})
@@ -91,7 +101,7 @@ const GetCollegeDetails = async function (req, res) {
     // if (allData.length == 0)
     //   return res.status(404).send({ msg: "Enter valid Details in query" });
 
-    res.status(200).send({ status: true, msg: college });
+    res.status(200).send({ status: true, msg: result });
    
 
 
