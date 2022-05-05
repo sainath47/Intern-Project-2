@@ -39,8 +39,10 @@ const createCollege= async function (req, res) {
    
 
 
-    let collegeCreated = await collegeModel.create(data)
+    let createCollege= await collegeModel.create(data)
+    let collegeCreated = await collegeModel.findOne(createCollege._id).select({name:1,fullName:1,logoLink:1,isDeleted:1,_id:0})
     res.status(200).send({status:true,data: collegeCreated})
+
 
   } catch (err) {
     res.status(500).send({ msg: "server error", error: err.message });
@@ -57,11 +59,13 @@ const GetCollegeDetails = async function (req, res) {
     let collegeName = req.query.collegeName;
 
     const college = await collegeModel.findOne({name:collegeName })
+if(college.isDeleted== true){
+  res.status().send({msg:"deleted college details"})
+}
+
     const collegeCopy = await collegeModel.findOne({name:collegeName }).select({name:1,fullName:1,logoLink:1,interests:1,_id:0})
 
 // console.log(college)
-
-const {name,fullName,logoLink,isDeleted} = college
 
 
 
@@ -83,13 +87,15 @@ const {name,fullName,logoLink,isDeleted} = college
     //  console.log(res)
     //  (doubt 1)
     //method 2 (but why iam not able to create a new key in object , it worked only when schmea had that key)
-    // collegeCopy.interests= allData
+    collegeCopy["interests"]= allData
 
-
-    const result= {name,fullName,logoLink,isDeleted,interests:allData} 
+    // const {name,fullName,logoLink,isDeleted} = college
+    // const result= {name,fullName,logoLink,isDeleted,interests:allData} 
     
     // for (let i=0 ; i<allData.length;i++) {
+    
     //   collegeCopy.interests.push(allData[i])
+      
     // }
    
 
@@ -98,10 +104,9 @@ const {name,fullName,logoLink,isDeleted} = college
 //**Why iam not able to update an db entry only the response is changed */
     //*Validation
 
-    // if (allData.length == 0)
-    //   return res.status(404).send({ msg: "Enter valid Details in query" });
+  
 
-    res.status(200).send({ status: true, msg: result });
+    res.status(200).send({ status: true, msg: collegeCopy});
    
 
 
@@ -112,89 +117,7 @@ const {name,fullName,logoLink,isDeleted} = college
   }
 };
 
-// //*Create Author
-// const createAuthor= async function (req, res) {
-//   try{
 
-// //*Empty body validation
-
-//     const data = req.body
-//     if(Object.keys(data).length == 0){
-//       return res.status(400).send({status: false,msg: "Invalid request, Please provide Author details",
-//       });
-//     }
-
-// //*Extracts params from body
-
-//     const fname = req.body.fname;
-//     const lname = req.body.lname;
-//     const title = req.body.title;
-//     const email = req.body.email;
-//     const password = req.body.password;
-
-// //*Params Validation
-
-//     if (!fname) return res.status(400).send({ status: false, msg: "Firstname is required" })
-//     if (!lname) return res.status(400).send({ status: false, msg: "Lastname is required" })
-//     if (!title) return res.status(400).send({ status: false, msg: "Title is required" })
-//     if (!email) return res.status(400).send({ status: false, msg: "Email is required" })
-//     if (!password) return res.status(400).send({ status: false, msg: "Password is required" })
-
-// //*To check Email Exist or not
-
-//     let emailID= await authorModel.findOne({email})
-//     if(emailID) return res.status(400).send({msg:"Account already Present with this EmailID"})
-
-
-// //*Email format Validation
-
-//     const validate = function(v){ return /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(v)}
-//     if(!validate(email)) return res.status(400).send({ status: false, msg: "email is not valid" })
-
-// //*Author creation
-
-//     let authorCreated = await AuthorModel.create(data)
-//     res.status(200).send({status:true,data: authorCreated})
-
-// } catch (err) {
-// res.status(500).send({ msg: "server error", error: err.message });
-// }
-// }
-
-// //*Author Login
-// const loginAuthor = async function (req, res) {
-//   try{
-    
-//     //*Param validation
-//     let email = req.body.email;
-//     if(!email) return res.status(400).send({ status: false, msg: "Email is required" })
-//     let password = req.body.password;
-//     if(!password) return res.status(400).send({ status: false, msg: "Password is required" })
-  
-//     //*Checking correct Input
-//     let author = await AuthorModel.findOne({ email: email, password: password });
-//     if (!author) return res.status(400).send({status: false,msg: "Email or the Password is not Corerct"});
-
-//     //*Token Generation
-//     let token = jwt.sign(
-//       {
-//         authorId: author._id.toString(),
-//         batch: "brillientCoders",
-//         organisation: "RSPtechnologies",
-//       },
-//       "RSPtechnologies-brillientCoders"
-//     );
-    
-//     //*Sending token through Header
-//     res.header("x-Api-Key", token);
-//     res.status(200).send({ status: true, data: token ,msg: "Login Successfully"});
-      
-//     }
-//     catch (err) {
-//       res.status(500).send({ msg: "server error", error: err.message });
-//       }
-//     }
-  
 
   
 module.exports.createCollege= createCollege
