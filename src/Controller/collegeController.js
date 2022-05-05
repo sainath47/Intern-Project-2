@@ -40,14 +40,25 @@ const createCollege= async function (req, res) {
 
 
     let createCollege= await collegeModel.create(data)
-    let collegeCreated = await collegeModel.findOne(createCollege._id).select({name:1,fullName:1,logoLink:1,isDeleted:1,_id:0})
-    res.status(200).send({status:true,data: collegeCreated})
+    // console.log(createCollege)
+    // let collegeCreated = await collegeModel.findOne(createCollege._id).select({name:1,fullName:1,logoLink:1,isDeleted:1,_id:0})
+    res.status(200).send({status:true,data: createCollege})
 
 
   } catch (err) {
     res.status(500).send({ msg: "server error", error: err.message });
     }
     }
+
+
+
+
+
+
+
+
+
+
 
 
 //=================*Get College Details===============
