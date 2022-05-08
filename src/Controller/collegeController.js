@@ -87,7 +87,7 @@ const GetCollegeDetails = async function (req, res) {
 
 
 
-    college["interests"] = allData;
+    // college["interests"] = allData;
 
    
 
