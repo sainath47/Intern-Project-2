@@ -12,7 +12,7 @@ mongoose.connect("mongodb+srv://SAINATH47:COOLESTBEING@cluster0.fk14j.mongodb.ne
     useNewUrlParser: true
 })
 .then( () => console.log("MongoDb is connected"))
-.catch ( err => console.log(err) )
+.catch (err => console.log(err))
 
 
 app.use('/', route)
